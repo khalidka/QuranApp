@@ -172,3 +172,39 @@ body {
   background-color: #2ca4ab;
   color: rgb(207, 178, 178);
 }
+
+/* Styles for smartphones */
+@media screen and (max-width: 767px) {
+  .chapters {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Styles for tablets */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .chapters {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Styles for laptops*/
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+  .chapters {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  #search {
+    width: 100%;
+  }
+  #chapter-name-ar {
+    font-size: 20px;
+  }
+}
+
+/* Large screen */
+@media screen and (min-width: 1920px) {
+  .chapters {
+    width: 1570px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* Additional styles for large screens */
+}
