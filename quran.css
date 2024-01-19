@@ -5,3 +5,16 @@
   font-family: "QuranChapters";
   src: url("./tf/Mcs_Swer_Al_Quran_2.ttf");
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
