@@ -1,6 +1,5 @@
 const chapters = document.querySelector(".chapters");
 const searchInput = document.querySelector("#search");
-const pageLoader = document.querySelector("#loader");
 
 const displayAllChaptersInfo = (
   chapterInArabicName,
@@ -31,6 +30,31 @@ const displayAllChaptersInfo = (
 
 //search/filter chapters
 
+const filterChapter = (e) => {
+  let chapterInfo = document.querySelectorAll(".chapter-info");
+  let search = e.target.value.toUpperCase();
+  // Iterate over each chapter list
+  chapterInfo.forEach((chapter) => {
+    let filterChapterNameInEn = chapter
+      .querySelector("#chapter-name-en")
+      .innerText.toUpperCase();
+    let filterChapterNameInAr = chapter
+      .querySelector("#chapter-name-ar")
+      .innerText.toUpperCase();
+
+    if (
+      filterChapterNameInEn.indexOf(search) > -1 ||
+      filterChapterNameInAr.indexOf(search) > -1
+    ) {
+      // If found, display the chapter
+      chapter.style.display = "flex";
+    } else {
+      // If not found, hide the chapter
+      chapter.style.display = "none";
+    }
+  });
+};
+
 let baseApiUrl = "http://api.alquran.cloud/v1/quran/quran-uthmani";
 const getAllChapters = async () => {
   let response = await fetch(baseApiUrl);
@@ -49,3 +73,5 @@ const getAllChapters = async () => {
   });
 };
 getAllChapters();
+
+searchInput.addEventListener("input", filterChapter);
