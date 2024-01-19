@@ -19,5 +19,3 @@ const getAllChapters = async () => {
   });
 };
 getAllChapters();
-
-searchInput.addEventListener("input", filterChapter);
