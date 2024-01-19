@@ -3,14 +3,15 @@ const searchInput = document.querySelector("#search");
 const pageLoader = document.querySelector("#loader");
 
 const displayAllChaptersInfo = (
+  id,
   chapterInArabicName,
   chapterInEnglishName,
   englishNameTranslation,
-  TotalVersesInChapter,
+  verses,
   chapterNumber
 ) => {
   chapters.innerHTML += `
-  <div class='chapter-info'>
+  <div class='chapter-info' data-id="${id}" data-name="${chapterInArabicName}">
     <div class='chapter-names'>
       <a href='' id='chapter-name-en'>
         ${chapterInEnglishName}
@@ -22,7 +23,7 @@ const displayAllChaptersInfo = (
     <div class='chapter-description' style='margin-top: 45px'>
       <p id='about-chapter'>${englishNameTranslation}</p>
       <p id='total-verses'>
-        ${TotalVersesInChapter}
+        ${verses.length}
       </p>
     </div>
     <span id='chapter-verse-number'>${chapterNumber}</span>
@@ -56,6 +57,19 @@ const filterChapter = (e) => {
   });
 };
 
+const displayVerses = async (chapterId) => {
+  let response = await fetch(`http://api.alquran.cloud/v1/surah/${chapterId}`);
+  let chapter = await response.json();
+  chapters.innerHTML = `
+    <h3>${chapter.data.name}</h3>
+  `;
+  chapter.data.ayahs.forEach((ayah) => {
+    chapters.innerHTML += `
+    <p dir="rtl" lang="ar">${ayah.text}</p>
+    `;
+  });
+};
+
 let baseApiUrl = "http://api.alquran.cloud/v1/quran/quran-uthmani";
 const getAllChapters = async () => {
   pageLoader.style.display = "block";
@@ -64,16 +78,23 @@ const getAllChapters = async () => {
   pageLoader.style.display = "none";
   chapter.data.surahs.forEach((chapter) => {
     displayAllChaptersInfo(
+      chapter.number,
       chapter.name,
       chapter.englishName,
       chapter.englishNameTranslation,
-      chapter.ayahs.forEach((verse) => {
-        verse.numberInSurah;
-      }),
+      chapter.ayahs,
       chapter.number
     );
   });
+  let chapterInfoBoxes = document.querySelectorAll(".chapter-info");
+  chapterInfoBoxes.forEach((chapterInfo) => {
+    chapterInfo.addEventListener("click", function (e) {
+      e.preventDefault();
+      displayVerses(chapterInfo.dataset.id);
+    });
+  });
 };
+
 getAllChapters();
 
 searchInput.addEventListener("input", filterChapter);
