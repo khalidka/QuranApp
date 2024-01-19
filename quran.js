@@ -1,5 +1,6 @@
 const chapters = document.querySelector(".chapters");
 const searchInput = document.querySelector("#search");
+const pageLoader = document.querySelector("#loader");
 
 const displayAllChaptersInfo = (
   chapterInArabicName,
@@ -57,9 +58,10 @@ const filterChapter = (e) => {
 
 let baseApiUrl = "http://api.alquran.cloud/v1/quran/quran-uthmani";
 const getAllChapters = async () => {
+  pageLoader.style.display = "block";
   let response = await fetch(baseApiUrl);
   let chapter = await response.json();
-
+  pageLoader.style.display = "none";
   chapter.data.surahs.forEach((chapter) => {
     displayAllChaptersInfo(
       chapter.name,
