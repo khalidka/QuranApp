@@ -62,11 +62,42 @@ const displayVerses = async (chapterId) => {
   let chapter = await response.json();
   chapters.innerHTML = `
     <h3>${chapter.data.name}</h3>
+    <a href=''>Reading</a>
+    <a id ="translate-link"href=''>Translation</a>
   `;
   chapter.data.ayahs.forEach((ayah) => {
     chapters.innerHTML += `
     <p dir="rtl" lang="ar">${ayah.text}</p>
     `;
+  });
+  let translateLink = document.getElementById("translate-link");
+  translateLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    displayTranslation(chapterId);
+  });
+};
+
+const displayTranslation = async (chapterId) => {
+  let response = await fetch(
+    `http://api.alquran.cloud/v1/surah/${chapterId}/en.asad`
+  );
+  let translations = await response.json();
+  chapters.innerHTML = `
+    <h3>${translations.data.name}</h3>
+    <a href=''id="read-chapter">Reading</a>
+    <a id ="translate-link"href=''>Translation</a>
+  `;
+
+  translations.data.ayahs.forEach((translation) => {
+    chapters.innerHTML += `
+    <p>${translation.text}</p>
+    `;
+  });
+
+  let readChapter = document.getElementById("read-chapter");
+  readChapter.addEventListener("click", (e) => {
+    e.preventDefault();
+    displayVerses(chapterId);
   });
 };
 
