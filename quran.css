@@ -59,3 +59,116 @@ body {
   margin-top: 20px;
   display: none;
 }
+.chapters {
+  position: relative;
+  max-width: 1370px;
+  margin: 50px 5px;
+  display: grid;
+  grid-template-columns: repeat(3 1fr);
+  grid-gap: 15px;
+  padding: 16px;
+}
+.chapters h1 {
+  position: absolute;
+  top: 0;
+  margin-top: -45px;
+  margin-left: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Ubuntu", sans-serif;
+  color: #6ceed1;
+  text-decoration: underline;
+  border-bottom-color: #0f0f0f;
+  border-style: groove;
+}
+.chapters h1:focus {
+  text-decoration: underline;
+  border-bottom-color: #2ca4ab;
+  cursor: pointer;
+}
+.chapter-info {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 80px;
+  border-radius: 5px;
+  border: 1px solid #cedbe8;
+  transition: backgound-color 0.15s, border 0.15s, box-shadow 0.15s;
+  /* padding: 19px 16px; */
+}
+.chapter-info:hover {
+  border: 1px solid #6ceed1;
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1;
+}
+.chapter-names {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+}
+.chapter-names a {
+  font-size: 20px;
+  text-decoration: none;
+  margin: 30px;
+  color: #333;
+}
+#chapter-name-ar {
+  font-family: QuranChapters;
+  font-size: 25px;
+}
+#chaper-name-en {
+  font-family: "Ubuntu", sans-serif;
+}
+.chapter-description {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #2ca4ab;
+  margin: 0 auto;
+}
+#about-chapter {
+  display: flex;
+  position: absolute;
+  left: 30px;
+  font-family: "Ubuntu", sans-serif;
+  margin-top: 10px;
+}
+#total-verses {
+  position: absolute;
+  right: 10px;
+  font-family: "Ubuntu", sans-serif;
+  margin-top: 10px;
+}
+#chapter-verse-number {
+  position: absolute;
+  left: 0;
+  background-color: #f8f9fa;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+  font-family: "Ubuntu", sans-serif;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(
+    to bottom right,
+    #2ca4ab 50%,
+    #6ceed1 50%,
+    #6ceed1 50%,
+    #4ef3f3 50%
+  );
+}
+#chapter-verse-number:hover {
+  background-color: #2ca4ab;
+  color: rgb(207, 178, 178);
+}
