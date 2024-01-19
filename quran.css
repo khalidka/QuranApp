@@ -53,3 +53,9 @@ body {
   outline: none;
   box-shadow: 0 0 0 0.2rem rgba(0 172 193 0.25);
 }
+#loader {
+  width: 70px;
+  height: 70px;
+  margin-top: 20px;
+  display: none;
+}
