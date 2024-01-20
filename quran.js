@@ -57,13 +57,43 @@ const filterChapter = (e) => {
   });
 };
 
+let currentAudioIndex = 0;
+function playAudio(audios) {
+  if (currentAudioIndex < audios.length) {
+    // Play the current audio
+    audios[currentAudioIndex].play();
+
+    // Move to the next audio when the current one ends
+    audios[currentAudioIndex].addEventListener("ended", function () {
+      currentAudioIndex++;
+      playAudio(audios);
+    });
+  }
+}
+
+const getAudio = async (chapterId) => {
+  let response = await fetch("http://api.alquran.cloud/v1/quran/ar.alafasy");
+  let result = await response.json();
+  let versesContainer = document.getElementById("verses-container");
+  result.data.surahs[chapterId].ayahs.forEach((verse) => {
+    versesContainer.innerHTML += `
+    <audio class="audioPlayer" src="${verse.audio}" preload="auto"></audio>
+
+`;
+  });
+  let audios = document.querySelectorAll(".audioPlayer");
+  playAudio(audios);
+};
+
 function displayChapterHeader(chapterName) {
   return `
-    <h3>${chapterName}</h3>
     <div id="chapter-header">
-      <a id ="translate-link" href=''>Translation</a>
-      <a href='' id="read-chapter">Reading</a>
+      <a class="header-link" id ="translate-link" href=''>Translation</a>
+      <a class="header-link" href='' id="read-chapter">Reading</a>
+      <a class="header-link" href= "" id="listenQuran">Listen</a>
     </div>
+    <h3 style="text-align: center;">${chapterName}</h3>
+  
     <div id="verses-container"></div>
   `;
 }
@@ -92,6 +122,12 @@ const displayVerses = async (chapterId) => {
   readChapter.addEventListener("click", (e) => {
     e.preventDefault();
   });
+
+  let listenLink = document.getElementById("listenQuran");
+  listenLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    getAudio(chapterId - 1);
+  });
 };
 
 const displayTranslation = async (chapterId, arabicVerses) => {
@@ -110,7 +146,7 @@ const displayTranslation = async (chapterId, arabicVerses) => {
     <p>${translation.text}</p>
     <br>
     </div>
-    
+
     `;
   });
 
@@ -155,14 +191,3 @@ const getAllChapters = async () => {
 getAllChapters();
 
 searchInput.addEventListener("input", filterChapter);
-
-document.addEventListener("scroll", () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-  if (scrollTop + clientHeight >= scrollHeight) {
-    setTimeout(() => {
-      offset++;
-      reading(verses);
-    }, 1000);
-  }
-});
