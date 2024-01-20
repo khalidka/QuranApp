@@ -62,10 +62,13 @@ function playAudio(audios) {
   if (currentAudioIndex < audios.length) {
     // Play the current audio
     audios[currentAudioIndex].play();
+    let currentVerse = document.getElementById(`verse-${currentAudioIndex}`);
+    currentVerse.classList.add("highlight");
 
     // Move to the next audio when the current one ends
     audios[currentAudioIndex].addEventListener("ended", function () {
       currentAudioIndex++;
+      currentVerse.classList.remove("highlight");
       playAudio(audios);
     });
   }
@@ -104,10 +107,26 @@ const displayVerses = async (chapterId) => {
   chapters.innerHTML = displayChapterHeader(chapter.data.name);
   let versesContainer = document.getElementById("verses-container");
   let arabicVerses = chapter.data.ayahs;
-  arabicVerses.forEach((ayah) => {
+  console.log(chapterId);
+  if (chapterId !== "9") {
+    versesContainer.innerHTML +=
+      '<p class="verse" dir="rtl" lang="ar">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ</p>';
+  }
+  arabicVerses.forEach((ayah, index) => {
+    let verseText = ayah.text;
+    if (index === 0) {
+      verseText = verseText.replace(
+        "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ",
+        ""
+      );
+    }
     versesContainer.innerHTML += `
-    <div>
-     <p id="verses" dir="rtl" lang="ar">${ayah.text}</p>
+    <div class="verse-parent">
+     <span class="verse" id="verse-${index}" dir="rtl" lang="ar">${verseText}</span>
+     <span class="verse-number-container">
+      <img id="verse-sign" src="./images/ayah.png">
+      <span class="verse-number">${ayah.numberInSurah}</span>
+     </span>
     </div>
     `;
   });

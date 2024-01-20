@@ -270,18 +270,22 @@ h3 {
 .active-link {
   text-decoration: underline !important;
 }
-#verses {
+.verse {
   position: relative;
   display: flex;
   width: 100wh;
   font-family: "Scheherazade New", serif;
-  margin-bottom: 20px;
   font-size: 24px;
   font-weight: 400;
   line-height: 35px;
 }
 
-/* #ayah-sign {
+.highlight {
+  background-color: #2ca4ab;
+  color: black;
+}
+
+#verse-sign {
   position: relative;
   display: flex;
   justify-content: center;
@@ -290,6 +294,22 @@ h3 {
   top: 0;
   width: 50px;
   height: 60px;
-  margin-top: 90px;
+  margin-top: 20px;
   margin-left: 10px;
-} */
+}
+
+.verse-number-container {
+  position: relative;
+  display: inline-block;
+}
+
+.verse-number-container img {
+  display: block;
+}
+
+.verse-number-container .verse-number {
+  position: absolute;
+  top: 62%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+}
