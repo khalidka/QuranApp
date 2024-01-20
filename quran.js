@@ -57,47 +57,73 @@ const filterChapter = (e) => {
   });
 };
 
+function displayChapterHeader(chapterName) {
+  return `
+    <h3>${chapterName}</h3>
+    <div id="chapter-header">
+      <a id ="translate-link" href=''>Translation</a>
+      <a href='' id="read-chapter">Reading</a>
+    </div>
+    <div id="verses-container"></div>
+  `;
+}
+
 const displayVerses = async (chapterId) => {
   let response = await fetch(`http://api.alquran.cloud/v1/surah/${chapterId}`);
   let chapter = await response.json();
-  chapters.innerHTML = `
-    <h3>${chapter.data.name}</h3>
-    <a href=''>Reading</a>
-    <a id ="translate-link"href=''>Translation</a>
-  `;
-  chapter.data.ayahs.forEach((ayah) => {
-    chapters.innerHTML += `
-    <p dir="rtl" lang="ar">${ayah.text}</p>
+  chapters.innerHTML = displayChapterHeader(chapter.data.name);
+  let versesContainer = document.getElementById("verses-container");
+  let arabicVerses = chapter.data.ayahs;
+  arabicVerses.forEach((ayah) => {
+    versesContainer.innerHTML += `
+    <div>
+     <p id="verses" dir="rtl" lang="ar">${ayah.text}</p>
+    </div>
     `;
   });
   let translateLink = document.getElementById("translate-link");
   translateLink.addEventListener("click", (e) => {
     e.preventDefault();
-    displayTranslation(chapterId);
+    translateLink.classList.add("active-link");
+    displayTranslation(chapterId, arabicVerses);
+  });
+
+  let readChapter = document.getElementById("read-chapter");
+  readChapter.addEventListener("click", (e) => {
+    e.preventDefault();
   });
 };
 
-const displayTranslation = async (chapterId) => {
+const displayTranslation = async (chapterId, arabicVerses) => {
   let response = await fetch(
     `http://api.alquran.cloud/v1/surah/${chapterId}/en.asad`
   );
-  let translations = await response.json();
-  chapters.innerHTML = `
-    <h3>${translations.data.name}</h3>
-    <a href=''id="read-chapter">Reading</a>
-    <a id ="translate-link"href=''>Translation</a>
-  `;
-
-  translations.data.ayahs.forEach((translation) => {
-    chapters.innerHTML += `
+  let translatedChapter = await response.json();
+  chapters.innerHTML = displayChapterHeader(translatedChapter.data.name);
+  let versesContainer = document.getElementById("verses-container");
+  versesContainer.innerHTML = '<div id="translations"></div>';
+  let translationContainer = document.getElementById("translations");
+  translatedChapter.data.ayahs.forEach((translation, index) => {
+    translationContainer.innerHTML += `
+    <div>
+    <p dir="rtl" lang="ar">${arabicVerses[index].text}</p>
     <p>${translation.text}</p>
+    <br>
+    </div>
+    
     `;
   });
 
   let readChapter = document.getElementById("read-chapter");
   readChapter.addEventListener("click", (e) => {
     e.preventDefault();
+    readChapter.classList.add("active-link");
     displayVerses(chapterId);
+  });
+
+  let translateLink = document.getElementById("translate-link");
+  translateLink.addEventListener("click", (e) => {
+    e.preventDefault();
   });
 };
 
@@ -129,3 +155,14 @@ const getAllChapters = async () => {
 getAllChapters();
 
 searchInput.addEventListener("input", filterChapter);
+
+document.addEventListener("scroll", () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+  if (scrollTop + clientHeight >= scrollHeight) {
+    setTimeout(() => {
+      offset++;
+      reading(verses);
+    }, 1000);
+  }
+});
